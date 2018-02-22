@@ -6,25 +6,26 @@
  * Author URI: https://jmfurlott.com
  * Author: nabilfreeman<nabil+oss@freemans.website>
  * Author URI: http://freemans.website
- * Version: 1.1.0
+ * Version: 1.0.0
  * Plugin URI: https://github.com/jmfurlott/wp-api-yoast
  */
 
 function wp_api_encode_yoast($data, $post, $context) {
     $bk_metadesc = get_post_meta($post->ID, '_yoast_wpseo_metadesc', true);
+    $bk_metatitle = get_post_meta($post->ID, '_yoast_wpseo_title', true);
+    $bk_titles = get_option( 'wpseo_titles' );
     if(empty($bk_metadesc)) {
-      $bk_titles = get_option( 'wpseo_titles' );
       $bk_metadesc = $bk_titles['metadesc-post'];
-      if(class_exists('WPSEO_Replace_Vars')) {
-        $bk_replacer = new WPSEO_Replace_Vars();
-        // replace template variables
-        $bk_metadesc = $bk_replacer->replace( $bk_metadesc, $post);
-      }
+      $bk_metadesc = wpseo_replace_vars($bk_metadesc, $post);
+    }
+    if(empty($bk_metatitle)) {
+      $bk_metatitle = $bk_titles['title-post'];
+      $bk_metatitle = wpseo_replace_vars($bk_metatitle, $post);
     }
 
     $yoastMeta = array(
         'yoast_wpseo_focuskw' => get_post_meta($post->ID, '_yoast_wpseo_focuskw', true),
-        'yoast_wpseo_title' => get_post_meta($post->ID, '_yoast_wpseo_title', true),
+        'yoast_wpseo_title' => esc_html($bk_metatitle),
         'yoast_wpseo_metadesc' => esc_html($bk_metadesc),
         'yoast_wpseo_linkdex' => get_post_meta($post->ID, '_yoast_wpseo_linkdex', true),
         'yoast_wpseo_metakeywords' => get_post_meta($post->ID, '_yoast_wpseo_metakeywords', true),
