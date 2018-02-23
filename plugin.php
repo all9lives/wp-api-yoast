@@ -4,22 +4,27 @@
  * Description: Adds Yoast fields to page and post metadata
  * Author: jmfurlott<jmfurlott@gmail.com>
  * Author URI: https://jmfurlott.com
- * Author: nabilfreeman<nabil+oss@freemans.website>
- * Author URI: http://freemans.website
- * Version: 1.0.0
+ * Version: 1.1.0
  * Plugin URI: https://github.com/jmfurlott/wp-api-yoast
  */
-
 function wp_api_encode_yoast($data, $post, $context) {
     $bk_metadesc = get_post_meta($post->ID, '_yoast_wpseo_metadesc', true);
     $bk_metatitle = get_post_meta($post->ID, '_yoast_wpseo_title', true);
+
+    $post_type = 'post';
+    if ( is_object( $post ) && ( isset( $post->post_type ) && $post->post_type !== '' ) ) {
+			$post_type = $post->post_type;
+		}
     $bk_titles = get_option( 'wpseo_titles' );
+
     if(empty($bk_metadesc)) {
-      $bk_metadesc = $bk_titles['metadesc-post'];
+      $meta_key = 'metadesc-'.$post_type;
+      $bk_metadesc = $bk_titles[$meta_key];
       $bk_metadesc = wpseo_replace_vars($bk_metadesc, $post);
     }
     if(empty($bk_metatitle)) {
-      $bk_metatitle = $bk_titles['title-post'];
+      $meta_key = 'title-'.$post_type;
+      $bk_metatitle = $bk_titles[$meta_key];
       $bk_metatitle = wpseo_replace_vars($bk_metatitle, $post);
     }
 
