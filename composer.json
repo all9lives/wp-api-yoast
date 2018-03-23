@@ -1,0 +1,11 @@
+{
+    "name": "all9lives/wp-api-yoast",
+    "type": "wordpress-plugin",
+    "homepage": "https://github.com/all9lives/wp-api-yoast",
+    "license": "GPL-2.0",
+    "description": "Returns Yoast post or page metadata in a normal post or page request. Stores the metadata in the yoast_meta field of the returned data.",
+    "keywords": ["plugin","wordpress","wp-rest-api","wp-api-yoast","yoast"],
+    "require": {
+      "composer/installers": "^1.0.6"
+    }
+  }
